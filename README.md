@@ -4,7 +4,7 @@ A browser extension that hides posts you don't want to see on X, using rules in 
 "hide crypto shilling", "hide engagement bait", "hide posts about celebrity gossip".
 A small AI model runs **on your own GPU**. Nothing you see is sent anywhere.
 
-![Feed Filter hides matching posts on X behind a slim "Hidden" bar](store/shot1.png)
+![Feed Filter folding engagement bait, crypto shills and AI slop into slim "Hidden" bars](store/demo.gif)
 
 Hidden posts collapse into a thin bar (`Hidden · Crypto & trading · Show`). Clicking **Show**, or
 **Hide like this** on a post the filter missed, tunes that rule to your taste.
