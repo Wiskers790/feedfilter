@@ -1,0 +1,22 @@
+# Push a tag like v0.1.1 -> builds the extension and attaches feedfilter-v0.1.1.zip to a GitHub release.
+name: release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  extension:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci && npm run build
+      - name: Package
+        run: |
+          mkdir -p dist/feedfilter
+          rsync -a --exclude src --exclude 'enginetest.*' extension/ dist/feedfilter/
+          cd dist && zip -qr "feedfilter-${GITHUB_REF_NAME}.zip" feedfilter
+      - run: gh release create "$GITHUB_REF_NAME" "dist/feedfilter-${GITHUB_REF_NAME}.zip" --title "Feed Filter $GITHUB_REF_NAME" --notes-file .github/release-notes.md
+        env: { GH_TOKEN: "${{ github.token }}" }

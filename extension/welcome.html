@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Welcome to Feed Filter</title><link rel="stylesheet" href="welcome.css"></head>
+<body><main>
+  <div class="logo"><img src="icon128.png" alt=""><span>Feed Filter</span></div>
+  <h1>Hide the posts you don't want to see.</h1>
+  <p class="lead">Write rules in plain English. A small AI model checks each post right on your computer, using your graphics card. Nothing you see or do leaves your machine.</p>
+  <ol class="steps">
+    <li id="s-gpu"><span class="dot"></span><div><b>Checking your graphics card</b><small id="t-gpu">…</small></div></li>
+    <li id="s-dl"><span class="dot"></span><div><b>Downloading the model (one time, ~440 MB)</b><small id="t-dl">Waiting…</small><div class="bar"><i id="bar"></i></div></div></li>
+    <li id="s-go"><span class="dot"></span><div><b>Ready</b><small id="t-go">Open X and scroll. Matching posts fold into a slim "Hidden" bar you can always open.</small></div></li>
+  </ol>
+  <a id="go" class="btn" href="https://x.com/home" hidden>Open X</a>
+  <section class="tips">
+    <div><b>Your rules</b>Click the Feed Filter icon in the toolbar to switch rules on or off, make them stricter or looser, or add your own.</div>
+    <div><b>It learns from you</b>"Show" on a hidden post makes that rule a bit less strict; "Hide like this" on a visible post makes it catch more.</div>
+    <div><b>Private by design</b>The model runs locally. No account, no servers, no tracking.</div>
+  </section>
+</main><script type="module" src="welcome.js"></script></body></html>

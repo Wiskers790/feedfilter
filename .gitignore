@@ -1,0 +1,6 @@
+node_modules/
+# build output (npm run build); sources live in extension/src
+extension/*.js
+extension/ort/
+dist/
+__pycache__/

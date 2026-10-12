@@ -1,0 +1,11 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Feed Filter</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+  <header><div class="logo">Feed Filter</div><label class="sw big"><input id="enabled" type="checkbox"><span></span></label></header>
+  <p class="sub">Hide posts by rules in plain English. Runs on your computer.</p>
+  <div id="status" class="status">Starting…</div>
+  <div id="rules"></div>
+  <form id="add"><input id="newrule" placeholder="Add a rule, e.g. Hide posts about celebrity gossip" maxlength="300"><button>Add</button></form>
+  <details id="recent" hidden><summary>Recently hidden</summary><ul id="recent-list"></ul></details>
+  <p class="foot">“Show” on a hidden post or “Hide like this” on a visible one teaches the rule.</p>
+  <script type="module" src="popup.js"></script>
+</body></html>

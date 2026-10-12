@@ -1,0 +1,16 @@
+# Push a tag like model-v1 -> publishes the model files (stored with Git LFS in model/release/) as release assets.
+# The extension downloads them from https://github.com/<owner>/feedfilter/releases/download/model-v1/ on first run.
+name: model
+on:
+  push:
+    tags: ["model-v*"]
+permissions:
+  contents: write
+jobs:
+  model:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { lfs: true }
+      - run: gh release create "$GITHUB_REF_NAME" model/release/* --latest=false --title "Model files ($GITHUB_REF_NAME)" --notes "Kai-0.6B (vllm-sr/Decision-2.0-Kai-0.6B, Apache-2.0), 4-bit ONNX build for the browser. The extension downloads these automatically; you don't need to."
+        env: { GH_TOKEN: "${{ github.token }}" }

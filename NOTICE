@@ -1,0 +1,8 @@
+Feed Filter
+Copyright (c) 2026 The Feed Filter authors (MIT, see LICENSE)
+
+This project redistributes a converted (4-bit ONNX) build of Decision-2.0-Kai-0.6B by vllm-sr
+(https://huggingface.co/vllm-sr/Decision-2.0-Kai-0.6B), licensed under the Apache License, Version 2.0
+(https://www.apache.org/licenses/LICENSE-2.0). Changes: exported to ONNX, MatMul weights quantized to 4 bits,
+embedding rows quantized to 8 bits, decision head exported as head.bin/head.json. Kai is built on Qwen3-0.6B
+(Apache-2.0).

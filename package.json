@@ -1,0 +1,14 @@
+{
+  "name": "feedfilter",
+  "private": true,
+  "version": "0.1.1",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@huggingface/tokenizers": "^0.2.0",
+    "esbuild": "^0.28.2",
+    "onnxruntime-web": "^1.30.0"
+  }
+}

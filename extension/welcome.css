@@ -1,0 +1,15 @@
+:root { color-scheme: light dark; --bg:#fbfbfe; --ink:#14141a; --muted:#6b6b7b; --line:#e7e5f0; --acc:#7b6bf0; --ok:#1f9d63; --warn:#c77d1e; }
+@media (prefers-color-scheme: dark) { :root { --bg:#0e0e13; --ink:#eeeef4; --muted:#9a98ad; --line:#26262f; --acc:#a99bff; --ok:#4fd39a; --warn:#e7b36a; } }
+* { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width:640px; margin:56px auto; padding:0 24px; }
+.logo { display:flex; align-items:center; gap:10px; font-weight:800; } .logo img { width:36px; height:36px; }
+h1 { font-size:34px; line-height:1.15; letter-spacing:-.02em; margin:24px 0 10px; } .lead { color:var(--muted); font-size:17px; margin:0 0 28px; }
+.steps { list-style:none; padding:0; margin:0 0 24px; } .steps li { display:flex; gap:14px; padding:14px 0; border-top:1px solid var(--line); }
+.steps small { display:block; color:var(--muted); font-size:14px; margin-top:2px; }
+.dot { width:14px; height:14px; border-radius:50%; border:2px solid var(--line); margin-top:5px; flex:none; }
+li.active .dot { border-color:var(--acc); } li.done .dot { background:var(--ok); border-color:var(--ok); } li.fail .dot { background:var(--warn); border-color:var(--warn); }
+li.fail small { color:var(--warn); }
+.bar { height:6px; border-radius:3px; background:var(--line); margin-top:8px; overflow:hidden; } .bar i { display:block; height:100%; width:0; background:var(--acc); transition:width .3s; }
+.btn { display:inline-block; background:var(--acc); color:#fff; text-decoration:none; font-weight:700; padding:12px 22px; border-radius:12px; }
+.tips { display:grid; gap:12px; margin-top:32px; } .tips div { border:1px solid var(--line); border-radius:14px; padding:14px 16px; color:var(--muted); font-size:14px; }
+.tips b { display:block; color:var(--ink); font-size:15px; margin-bottom:2px; }
