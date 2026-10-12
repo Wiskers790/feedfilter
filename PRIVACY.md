@@ -9,8 +9,10 @@ and checks them against your rules with an AI model that runs inside your browse
 Post text, your rules, your settings and the list of recently hidden posts stay on your device (in the browser's
 extension storage). Nothing is sent to us or to anyone else.
 
-**Network requests.** The only thing the extension downloads is the AI model itself (about 450 MB, once), from the
-project's public GitHub release page (github.com). That request contains no information about you or your browsing.
+**Network requests.** The extension downloads the AI model itself (about 450 MB, once) from the project's public
+GitHub release page (github.com), and checks GitHub for new versions (Firefox does this automatically for add-on
+updates; the Chrome build asks GitHub's public API for the latest release number at most every few hours). These
+requests contain no information about you or your browsing.
 
 **No accounts, analytics, or tracking.** There is no sign-up, no telemetry, no advertising, and no third-party code
 that phones home.
