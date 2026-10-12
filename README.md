@@ -11,6 +11,9 @@ Hidden posts collapse into a thin bar (`Hidden · Crypto & trading · Show`). Cl
 Needs a Chromium browser (Chrome, Edge, Brave…) with WebGPU on a real graphics card. Most computers from the
 last several years qualify.
 
+**Chrome Web Store:** coming soon (one-click install and automatic updates).
+
+**Manual install (works today):**
 1. Download `feedfilter-*.zip` from the [latest release](../../releases/latest) and unzip it.
 2. Open `chrome://extensions`, turn on **Developer mode** (top right), click **Load unpacked**, and choose the
    unzipped `feedfilter` folder.
@@ -60,7 +63,9 @@ Load `extension/` unpacked. To serve the model locally instead of from the relea
 `model/release` at port 8777 and set `chrome.storage.local.set({modelBase: "http://127.0.0.1:8777/"})` in the
 extension's service worker console.
 
-Releases: tag `vX.Y.Z` and push; a workflow builds the zip and creates the release.
+Releases: bump the version in `extension/manifest.json`, tag `vX.Y.Z` and push; a workflow runs `npm run package` and
+creates the release. The same zip is what gets uploaded to the Chrome Web Store (listing text in `store/LISTING.md`,
+images rendered from `store/shots.html` by `store/render.py`).
 
 ## License
 MIT for this code. The Kai model weights are Apache-2.0 (see `NOTICE`).

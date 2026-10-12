@@ -1,0 +1,123 @@
+<!doctype html>
+<!-- Chrome Web Store images. Render with store/render.py: each #frame id becomes one PNG at its exact size. -->
+<html><head><meta charset="utf-8"><title>Feed Filter store images</title>
+<style>
+  :root { --bg:#0e0e13; --panel:#15151c; --ink:#eeeef4; --muted:#9a98ad; --line:#26262f; --acc:#a99bff; --acc2:#7b6bf0; --ok:#4fd39a; }
+  * { box-sizing:border-box; } body { margin:0; background:#000; font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; color:var(--ink); }
+  .frame { width:1280px; height:800px; position:relative; overflow:hidden; display:grid; grid-template-columns: 520px 1fr; align-items:center;
+           background: radial-gradient(900px 600px at 85% 20%, rgba(123,107,240,.22), transparent 60%), var(--bg); margin-bottom:20px; }
+  .copy { padding: 0 0 0 80px; } .brand { display:flex; align-items:center; gap:12px; font-weight:800; font-size:20px; margin-bottom:34px; }
+  .brand img { width:40px; height:40px; }
+  h1 { font-size:54px; line-height:1.05; letter-spacing:-.03em; margin:0 0 22px; } h1 em { font-style:normal; color:var(--acc); }
+  .lead { color:var(--muted); font-size:21px; line-height:1.45; margin:0; max-width:420px; }
+  .stage { display:flex; justify-content:center; align-items:center; height:100%; }
+
+  /* feed mock */
+  .feed { width:560px; background:#000; border:1px solid var(--line); border-radius:22px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.6); }
+  .post { display:flex; gap:12px; padding:16px 18px; border-bottom:1px solid var(--line); }
+  .av { width:42px; height:42px; border-radius:50%; flex:none; }
+  .who { font-size:15px; } .who b { margin-right:6px; } .who span { color:#71767b; }
+  .txt { font-size:16px; line-height:1.4; margin-top:3px; color:#e7e9ea; }
+  .acts { display:flex; gap:56px; margin-top:10px; color:#71767b; font-size:13px; }
+  .bar { display:flex; align-items:center; gap:10px; padding:11px 18px; color:#8b98a5; font-size:14px; border-bottom:1px solid var(--line); background:rgba(169,155,255,.05); }
+  .bar .dot { width:8px; height:8px; border-radius:50%; background:var(--acc); } .bar b { color:#c9c0ff; }
+  .bar .show { margin-left:auto; border:1px solid rgba(127,127,127,.4); border-radius:999px; padding:3px 13px; font-size:13px; }
+
+  /* popup mock (styles from extension/popup.css, dark) */
+  .popup { width:400px; background:#111117; border:1px solid var(--line); border-radius:18px; padding:18px 18px 14px; font-size:14px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
+  .popup header { display:flex; justify-content:space-between; align-items:center; } .popup .logo { font-weight:800; font-size:17px; }
+  .sub { color:var(--muted); margin:4px 0 12px; font-size:13px; }
+  .status { background:#18181f; border:1px solid var(--line); border-radius:10px; padding:9px 11px; font-size:12.5px; margin-bottom:12px; }
+  .status::before { content:"●"; color:var(--ok); margin-right:6px; }
+  .rule { display:flex; gap:10px; padding:11px; border:1px solid var(--line); border-radius:12px; margin-bottom:8px; }
+  .rule.off { opacity:.55; } .rule .name { font-weight:700; } .rule .text { color:var(--muted); font-size:12px; margin-top:2px; }
+  .sens { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted); margin-top:7px; }
+  .track { flex:1; height:4px; border-radius:2px; background:var(--line); position:relative; } .track i { position:absolute; left:0; top:0; bottom:0; border-radius:2px; background:var(--acc); }
+  .track i::after { content:""; position:absolute; right:-7px; top:-5px; width:14px; height:14px; border-radius:50%; background:var(--acc); }
+  .sw { width:34px; height:20px; border-radius:999px; background:var(--line); position:relative; flex:none; margin-top:1px; }
+  .sw::after { content:""; position:absolute; left:3px; top:3px; width:14px; height:14px; border-radius:50%; background:#fff; }
+  .sw.on { background:var(--acc2); } .sw.on::after { left:17px; }
+  .add { display:flex; gap:6px; margin-top:10px; } .add div { flex:1; padding:9px 11px; border-radius:10px; border:1px solid var(--acc); background:#18181f; font-size:13px; }
+  .add span { background:var(--acc2); color:#fff; border-radius:10px; padding:9px 14px; font-weight:700; }
+  .new { border-color: rgba(169,155,255,.6); background: rgba(169,155,255,.06); }
+
+  /* privacy */
+  .points { display:grid; gap:16px; width:560px; }
+  .pt { display:flex; gap:18px; align-items:flex-start; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:22px 24px; }
+  .pt .ic { width:44px; height:44px; border-radius:12px; background:rgba(169,155,255,.14); color:var(--acc); display:grid; place-items:center; font-size:22px; flex:none; }
+  .pt b { display:block; font-size:19px; margin-bottom:4px; } .pt span { color:var(--muted); font-size:15.5px; line-height:1.45; }
+
+  /* small promo tile 440x280 */
+  .tile { width:440px; height:280px; display:flex; flex-direction:column; justify-content:center; padding:0 36px;
+          background: radial-gradient(400px 260px at 90% 10%, rgba(123,107,240,.35), transparent 70%), var(--bg); }
+  .tile .brand { margin-bottom:16px; font-size:24px; } .tile .brand img { width:48px; height:48px; }
+  .tile p { margin:0; font-size:22px; line-height:1.25; font-weight:700; letter-spacing:-.01em; } .tile p em { font-style:normal; color:var(--acc); }
+  .tile small { color:var(--muted); font-size:14px; margin-top:10px; }
+</style></head><body>
+
+<!-- 1: what it does -->
+<section class="frame" id="shot1">
+  <div class="copy">
+    <div class="brand"><img src="icon128.png" alt="">Feed Filter</div>
+    <h1>Hide the posts you <em>don't want</em> to see.</h1>
+    <p class="lead">Write rules in plain English. A small AI model checks every post on X before you scroll to it.</p>
+  </div>
+  <div class="stage"><div class="feed">
+    <div class="post"><div class="av" style="background:#4b7bec"></div><div><div class="who"><b>Maya Chen</b><span>@maya_codes · 2h</span></div>
+      <div class="txt">Shipped dark mode for our docs today. Three lines of CSS and two days of arguing about the exact gray.</div>
+      <div class="acts"><span>💬 24</span><span>🔁 8</span><span>♡ 312</span></div></div></div>
+    <div class="bar"><span class="dot"></span><span>Hidden · <b>Crypto &amp; trading</b></span><span class="show">Show</span></div>
+    <div class="post"><div class="av" style="background:#20bf6b"></div><div><div class="who"><b>Jo Rivera</b><span>@trailrunner_jo · 3h</span></div>
+      <div class="txt">Sunrise loop this morning, 14 km. Legs are toast, worth it.</div>
+      <div class="acts"><span>💬 6</span><span>🔁 1</span><span>♡ 97</span></div></div></div>
+    <div class="bar"><span class="dot"></span><span>Hidden · <b>Engagement bait</b></span><span class="show">Show</span></div>
+    <div class="post"><div class="av" style="background:#fa8231"></div><div><div class="who"><b>Kitchen Lab</b><span>@kitchenlab · 4h</span></div>
+      <div class="txt">Pasta water doesn't need to be "salty like the sea". About 1% salt is plenty, and your sauce will thank you.</div>
+      <div class="acts"><span>💬 51</span><span>🔁 40</span><span>♡ 1.2K</span></div></div></div>
+    <div class="bar"><span class="dot"></span><span>Hidden · <b>AI slop</b></span><span class="show">Show</span></div>
+  </div></div>
+</section>
+
+<!-- 2: rules -->
+<section class="frame" id="shot2">
+  <div class="copy">
+    <div class="brand"><img src="icon128.png" alt="">Feed Filter</div>
+    <h1>Your rules, <em>your words.</em></h1>
+    <p class="lead">Turn on the built-in rules or write your own. Make each one stricter or looser. Tap “Show” or “Hide like this” and it learns your taste.</p>
+  </div>
+  <div class="stage"><div class="popup">
+    <header><div class="logo">Feed Filter</div><div class="sw on"></div></header>
+    <p class="sub">Hide posts by rules in plain English. Runs on your computer.</p>
+    <div class="status">Ready · 214 posts checked, 37 hidden</div>
+    <div class="rule"><div class="sw on"></div><div style="flex:1"><div class="name">Crypto &amp; trading</div><div class="text">Hide crypto and trading posts: tokens, coins, prices, trading bots, trading profits or financial referral links.</div>
+      <div class="sens"><span>Hide less</span><div class="track"><i style="width:50%"></i></div><span>Hide more</span></div></div></div>
+    <div class="rule"><div class="sw on"></div><div style="flex:1"><div class="name">Engagement bait  · beta</div><div class="text">Hide engagement bait: posts written mainly to farm likes, replies, follows or bookmarks.</div>
+      <div class="sens"><span>Hide less</span><div class="track"><i style="width:62%"></i></div><span>Hide more</span></div></div></div>
+    <div class="rule off"><div class="sw"></div><div style="flex:1"><div class="name">Politics &amp; outrage</div><div class="text">Hide politics and outrage: posts about politics, government, elections, culture-war topics.</div></div></div>
+    <div class="rule new"><div class="sw on"></div><div style="flex:1"><div class="name">Celebrity gossip</div><div class="text">Hide posts about celebrity gossip</div>
+      <div class="sens"><span>Hide less</span><div class="track"><i style="width:50%"></i></div><span>Hide more</span></div></div></div>
+    <div class="add"><div>Hide posts about sports spoilers</div><span>Add</span></div>
+  </div></div>
+</section>
+
+<!-- 3: privacy -->
+<section class="frame" id="shot3">
+  <div class="copy">
+    <div class="brand"><img src="icon128.png" alt="">Feed Filter</div>
+    <h1>Private <em>by design.</em></h1>
+    <p class="lead">The AI runs inside your browser, on your own graphics card. What you read never leaves your computer.</p>
+  </div>
+  <div class="stage"><div class="points">
+    <div class="pt"><div class="ic">⚡</div><div><b>Runs on your GPU</b><span>A 0.6B-parameter decision model, downloaded once. About half a second per post, decided before it reaches your screen.</span></div></div>
+    <div class="pt"><div class="ic">🔒</div><div><b>No servers, no account</b><span>No sign-up, no tracking, no analytics. Posts are checked locally and nothing is sent anywhere.</span></div></div>
+    <div class="pt"><div class="ic">↺</div><div><b>Nothing is deleted</b><span>Hidden posts fold into a slim bar. One click shows them again.</span></div></div>
+  </div></div>
+</section>
+
+<!-- small promo tile -->
+<section class="tile" id="tile">
+  <div class="brand"><img src="icon128.png" alt="">Feed Filter</div>
+  <p>Hide the posts you <em>don't want</em> to&nbsp;see.</p>
+  <small>Plain-English rules · on-device AI</small>
+</section>
+</body></html>

@@ -12,11 +12,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
-      - run: npm ci && npm run build
-      - name: Package
-        run: |
-          mkdir -p dist/feedfilter
-          rsync -a --exclude src --exclude 'enginetest.*' extension/ dist/feedfilter/
-          cd dist && zip -qr "feedfilter-${GITHUB_REF_NAME}.zip" feedfilter
+      - run: npm ci && npm run package
       - run: gh release create "$GITHUB_REF_NAME" "dist/feedfilter-${GITHUB_REF_NAME}.zip" --title "Feed Filter $GITHUB_REF_NAME" --notes-file .github/release-notes.md
         env: { GH_TOKEN: "${{ github.token }}" }

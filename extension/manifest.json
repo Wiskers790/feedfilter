@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Feed Filter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Hide posts you don't want to see, using rules in plain English. A small AI model runs on your own computer; nothing is sent anywhere.",
   "permissions": ["storage", "offscreen", "unlimitedStorage"],
-  "host_permissions": ["https://x.com/*", "https://twitter.com/*", "https://github.com/*", "https://release-assets.githubusercontent.com/*", "https://objects.githubusercontent.com/*", "http://127.0.0.1:8777/*"],
+  "host_permissions": ["https://x.com/*", "https://twitter.com/*", "https://github.com/*", "https://release-assets.githubusercontent.com/*", "http://127.0.0.1:8777/*"],
   "background": { "service_worker": "background.js", "type": "module" },
   "content_scripts": [{ "matches": ["https://x.com/*", "https://twitter.com/*"], "js": ["content_x.js"], "run_at": "document_idle" }],
-  "action": { "default_popup": "popup.html", "default_title": "Feed Filter" },
+  "action": { "default_popup": "popup.html", "default_title": "Feed Filter", "default_icon": { "16": "icon16.png", "32": "icon32.png" } },
   "content_security_policy": { "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'" },
-  "icons": { "128": "icon128.png" }
+  "icons": { "16": "icon16.png", "32": "icon32.png", "48": "icon48.png", "128": "icon128.png" }
 }
