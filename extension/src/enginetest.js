@@ -3,10 +3,10 @@ import { startForTest, score } from "./engine.js";
 const out = document.getElementById("out");
 const log = (s) => { out.textContent += s + "\n"; };
 (async () => {
-  const cases = await (await fetch("http://127.0.0.1:8777/parity_cases.json")).json();
+  const q = new URLSearchParams(location.search), base = q.get("base") || "http://127.0.0.1:8777/";
+  const cases = await (await fetch(base + "parity_cases.json")).json();
   const t0 = performance.now();
-  const force = new URLSearchParams(location.search).get("model") || undefined;
-  const eng = await startForTest("http://127.0.0.1:8777/", force);
+  const eng = await startForTest(base, q.get("model") || undefined);
   log(`loaded on ${eng.backend} in ${Math.round(performance.now() - t0)} ms`);
   const res = [];
   for (const c of cases) {
@@ -14,6 +14,6 @@ const log = (s) => { out.textContent += s + "\n"; };
     const p = await score(c.text, c.questions);
     res.push({ id: c.id, p, ms: performance.now() - t });
   }
-  window.__RESULT__ = { backend: eng.backend, model: force, res };
+  window.__RESULT__ = { backend: eng.backend, model: q.get("model"), res };
   log("done " + res.length);
 })().catch((e) => { log("ERROR " + e); window.__RESULT__ = { error: String(e) }; });

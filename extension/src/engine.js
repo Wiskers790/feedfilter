@@ -19,7 +19,11 @@ ort.env.webgpu.powerPreference = "high-performance";
 
 let ready = null;          // Promise<{session, tok, head, backend}>
 let status = { state: "idle", progress: 0, backend: null, error: null };
-const report = () => chrome.runtime.sendMessage({ type: "engine-status", status }).catch(() => {});
+// Chrome: the engine lives in an offscreen page and reports to the background worker by message.
+// Firefox: it lives in the background page itself, which swaps in a direct reporter (setReporter).
+let reporter = (st) => chrome.runtime.sendMessage({ type: "engine-status", status: st }).catch(() => {});
+const report = () => reporter(status);
+export const setReporter = (fn) => { reporter = fn; };
 
 async function fetchCached(base, name, onBytes) {
   const cache = await caches.open("feedfilter-model-v1");
@@ -52,7 +56,7 @@ async function checkGpu() {
   try { ad = await navigator.gpu.requestAdapter({ powerPreference: "high-performance" }); } catch (e) {}
   if (!ad) return { ok: false, reason: "No GPU is available to the browser." };
   const info = ad.info || {};
-  const name = [info.vendor, info.description || info.architecture].filter(Boolean).join(" ") || "GPU";
+  const name = [info.vendor, info.description || info.architecture].filter(Boolean).join(" ");   // empty in Firefox, which hides GPU names
   if (info.isFallbackAdapter || /swiftshader|llvmpipe|lavapipe/i.test(`${name} ${info.device || ""}`))
     return { ok: false, reason: "The browser only offers a software GPU emulator, which is too slow." };
   return { ok: true, name, f16: ad.features.has("shader-f16") };
@@ -168,27 +172,36 @@ async function score(text, questions) {
 export { load, score };
 export function startForTest(base, force) { ready = load(base, force); return ready; }
 
-// ------------------------------------------------------------ messaging (one request at a time keeps the GPU calm)
+// ------------------------------------------------------------ requests (one at a time keeps the GPU calm)
 
 let queue = Promise.resolve();
-chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
-  if (msg.target !== "offscreen") return;
+export function handle(msg) {
   if (msg.type === "init") {
-    if (!ready) ready = load(msg.modelBase || DEFAULT_BASE).catch((e) => {
-      if (status.state !== "unsupported") { status = { state: "error", error: String(e.message || e) }; report(); }
-      ready = null; throw e;
-    });
-    ready.catch(() => {});
-    reply(status); return;
+    if (!ready) {
+      ready = load(msg.modelBase || DEFAULT_BASE).catch((e) => {
+        if (status.state !== "unsupported") { status = { state: "error", error: String(e.message || e) }; report(); }
+        ready = null; throw e;
+      });
+      ready.catch(() => {});
+    }
+    return Promise.resolve(status);
   }
-  if (msg.type === "status") { reply(status); return; }
+  if (msg.type === "status") return Promise.resolve(status);
   if (msg.type === "score") {
-    if (!ready) { reply({ error: "model not loaded" }); return; }
+    if (!ready) return Promise.resolve({ error: "model not loaded" });
     const t0 = performance.now();
     const timed = () => Promise.race([score(msg.text, msg.questions), new Promise((_, no) => setTimeout(() => no(new Error("timeout")), 20000))]);
-    queue = queue.then(timed)
-      .then((p) => reply({ p, ms: performance.now() - t0 }))
-      .catch((e) => reply({ error: String(e) }));
-    return true;   // async reply
+    const out = queue.then(timed).then((p) => ({ p, ms: performance.now() - t0 }), (e) => ({ error: String(e) }));
+    queue = out;
+    return out;
   }
+  return null;
+}
+
+if (!FIREFOX) chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
+  if (msg.target !== "offscreen") return;
+  const r = handle(msg);
+  if (!r) return;
+  r.then(reply);
+  return true;   // async reply
 });

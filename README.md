@@ -9,9 +9,14 @@ A small AI model runs **on your own GPU**. Nothing you see is sent anywhere.
 Hidden posts collapse into a thin bar (`Hidden · Crypto & trading · Show`). Clicking **Show**, or
 **Hide like this** on a post the filter missed, tunes that rule to your taste.
 
-## Install (2 minutes)
+## Install
 
-### [⬇ Download Feed Filter](https://github.com/Wiskers790/feedfilter/releases/latest/download/feedfilter.zip)
+### Firefox: one click
+**[➕ Add to Firefox](https://github.com/Wiskers790/feedfilter/releases/latest/download/feedfilter.xpi)**: open this
+link in Firefox and click **Add**. It updates itself.
+
+### Chrome, Edge, Brave (2 minutes)
+**[⬇ Download for Chrome](https://github.com/Wiskers790/feedfilter/releases/latest/download/feedfilter.zip)**
 
 ![Install in 3 steps: download and unzip, turn on Developer mode in chrome://extensions, drag the folder in](store/install.png)
 
@@ -21,10 +26,11 @@ Hidden posts collapse into a thin bar (`Hidden · Crypto & trading · Show`). Cl
 3. **Drag the `feedfilter` folder onto that page**, or click **Load unpacked** and choose it.
 
 The welcome page opens and the model (~450 MB) downloads once. Then open x.com and scroll.
-Works in Chrome, Edge (`edge://extensions`), Brave and other Chromium browsers with WebGPU on a real graphics card,
-which most computers from the last several years have.
+Works in Firefox and in Chrome, Edge (`edge://extensions`), Brave and other Chromium browsers, on a computer whose
+graphics card supports WebGPU (most from the last several years). Chrome runs the model several times faster than
+Firefox (on a laptop RTX 3050 with all rules on: ~0.5 s vs ~2.6 s per post; Firefox with the default rules: ~0.8 s).
 
-**Updates:** when a new version is out, the extension's popup tells you. Download it again, replace the folder,
+**Updates (Chrome):** when a new version is out, the extension's popup tells you. Download it again, replace the folder,
 and click ↻ on the extension in `chrome://extensions`. Your rules and the downloaded model are kept.
 
 **Linux laptops with an NVIDIA + Intel GPU:** if the popup says your computer isn't supported, start Chrome on the
@@ -68,8 +74,12 @@ Load `extension/` unpacked. To serve the model locally instead of from the relea
 `model/release` at port 8777 and set `chrome.storage.local.set({modelBase: "http://127.0.0.1:8777/"})` in the
 extension's service worker console.
 
-Releases: bump the version in `extension/manifest.json`, tag `vX.Y.Z` and push; a workflow runs `npm run package` and
-creates the release. The same zip is what gets uploaded to the Chrome Web Store (listing text in `store/LISTING.md`,
+`npm run build` builds both `extension/` (Chrome, MV3) and `firefox/` (Firefox, MV2: the persistent background page
+runs the model since Firefox has no offscreen documents). Test Firefox with `tests/firefox.py` (WebDriver BiDi).
+
+Releases: bump the version in `extension/manifest.json`, tag `vX.Y.Z` and push; a workflow runs `npm run package`,
+signs the Firefox build with Mozilla (needs the `AMO_JWT_ISSUER` / `AMO_JWT_SECRET` repo secrets) and creates the
+release. The same zip is what gets uploaded to the Chrome Web Store (listing text in `store/LISTING.md`,
 images rendered from `store/shots.html` by `store/render.py`).
 
 ## License

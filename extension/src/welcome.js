@@ -5,7 +5,7 @@ async function tick() {
   const { engine } = await chrome.storage.session.get("engine");
   if (!engine) return set("s-gpu", "active", "Starting…");
   if (engine.state === "unsupported") {
-    set("s-gpu", "fail", engine.error + " Feed Filter needs WebGPU on a real graphics card (most Windows and Mac computers have it). On Linux, WebGPU may need to be switched on in chrome://flags.");
+    set("s-gpu", "fail", engine.error + " Feed Filter needs WebGPU on a real graphics card (most Windows and Mac computers have it). On Linux, WebGPU may need to be switched on in the browser settings.");
     return;
   }
   if (engine.state === "error") { set("s-dl", "fail", engine.error); return; }

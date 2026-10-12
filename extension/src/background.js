@@ -12,10 +12,13 @@ async function ensureOffscreen() {
   await creating;
 }
 
+// How requests reach the model. Chrome: the offscreen page. Firefox: background_firefox.js calls the engine directly.
+let engineCall = FIREFOX ? null : async (msg) => { await ensureOffscreen(); return chrome.runtime.sendMessage({ target: "offscreen", ...msg }); };
+export const setEngine = (fn) => { engineCall = fn; };
+
 async function initEngine() {
-  await ensureOffscreen();
   const { modelBase } = await loadSettings();
-  return chrome.runtime.sendMessage({ target: "offscreen", type: "init", modelBase });
+  return engineCall({ type: "init", modelBase });
 }
 
 // post id -> {rulesKey, p: {ruleId: prob}}; kept for the session so scrolling back never re-runs the model
@@ -42,7 +45,7 @@ async function scorePost(id, text) {
   const hit = cache.get(id);
   if (hit && hit.key === key) return { p: hit.p };
   await initEngine();
-  const res = await chrome.runtime.sendMessage({ target: "offscreen", type: "score", text, questions: active.map(question) });
+  const res = await engineCall({ type: "score", text, questions: active.map(question) });
   if (res?.error) return { error: res.error };
   const p = Object.fromEntries(active.map((r, i) => [r.id, res.p[i]]));
   cache.set(id, { key, p }); bump({ checked: 1, msTotal: res.ms });

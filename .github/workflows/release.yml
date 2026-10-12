@@ -1,4 +1,8 @@
-# Push a tag like v0.1.1 -> builds the extension and attaches feedfilter-v0.1.1.zip to a GitHub release.
+# Push a tag like v0.3.0 -> builds both extensions and publishes a GitHub release with:
+#   feedfilter.zip (+ versioned copy)  Chrome/Edge/Brave, load unpacked
+#   feedfilter.xpi                     Firefox, signed by Mozilla (unlisted), one-click install
+#   updates.json                       Firefox self-update manifest (gecko.update_url points at the latest one)
+# Firefox signing needs repo secrets AMO_JWT_ISSUER and AMO_JWT_SECRET (addons.mozilla.org > Developer Hub > API keys).
 name: release
 on:
   push:
@@ -8,6 +12,9 @@ permissions:
 jobs:
   extension:
     runs-on: ubuntu-latest
+    env:
+      AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
+      AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -15,5 +22,14 @@ jobs:
       - run: npm ci && npm run package
       # also as feedfilter.zip, so releases/latest/download/feedfilter.zip always points at the newest version
       - run: cp "dist/feedfilter-${GITHUB_REF_NAME}.zip" dist/feedfilter.zip
-      - run: gh release create "$GITHUB_REF_NAME" dist/feedfilter.zip "dist/feedfilter-${GITHUB_REF_NAME}.zip" --title "Feed Filter $GITHUB_REF_NAME" --notes-file .github/release-notes.md
+      - name: Sign Firefox add-on
+        if: env.AMO_JWT_ISSUER != ''
+        run: |
+          npx web-ext sign --source-dir dist/feedfilter-firefox --channel unlisted \
+            --api-key "$AMO_JWT_ISSUER" --api-secret "$AMO_JWT_SECRET" --artifacts-dir dist/xpi
+          mv dist/xpi/*.xpi dist/feedfilter.xpi
+          V="${GITHUB_REF_NAME#v}"
+          printf '{"addons":{"feedfilter@wiskers790":{"updates":[{"version":"%s","update_link":"https://github.com/%s/releases/download/%s/feedfilter.xpi"}]}}}\n' \
+            "$V" "$GITHUB_REPOSITORY" "$GITHUB_REF_NAME" > dist/updates.json
+      - run: gh release create "$GITHUB_REF_NAME" dist/feedfilter.zip "dist/feedfilter-${GITHUB_REF_NAME}.zip" $(ls dist/feedfilter.xpi dist/updates.json 2>/dev/null) --title "Feed Filter $GITHUB_REF_NAME" --notes-file .github/release-notes.md
         env: { GH_TOKEN: "${{ github.token }}" }
