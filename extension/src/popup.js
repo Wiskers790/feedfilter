@@ -73,5 +73,28 @@ async function status() {
   }
 }
 
+// Installed from GitHub (not a store): no automatic updates, so tell the user when a newer release exists.
+const RELEASES = "https://github.com/Wiskers790/feedfilter/releases/latest";
+const newer = (a, b) => { const x = a.split(".").map(Number), y = b.split(".").map(Number);
+  for (let i = 0; i < 3; i++) if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); return false; };
+async function checkUpdate() {
+  const self = await chrome.management.getSelf().catch(() => null);
+  if (self?.installType !== "development") return;
+  let { latest } = await chrome.storage.local.get("latest");
+  if (!latest || Date.now() - latest.at > 6 * 3600e3) {
+    try {
+      const r = await (await fetch("https://api.github.com/repos/Wiskers790/feedfilter/releases/latest")).json();
+      latest = { v: String(r.tag_name || "").replace(/^v/, ""), at: Date.now() };
+      await chrome.storage.local.set({ latest });
+    } catch { return; }
+  }
+  const mine = chrome.runtime.getManifest().version;
+  if (!latest.v || !newer(latest.v, mine)) return;
+  const el = $("#update"); el.hidden = false;
+  el.querySelector("b").textContent = `Version ${latest.v} is available`;
+  el.querySelector("a").href = RELEASES;
+}
+
 chrome.runtime.sendMessage({ type: "init-engine" }).catch(() => {});
+checkUpdate();
 render(); status(); setInterval(status, 1000);

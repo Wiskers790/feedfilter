@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Feed Filter",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Hide posts you don't want to see, using rules in plain English. A small AI model runs on your own computer; nothing is sent anywhere.",
   "permissions": ["storage", "offscreen", "unlimitedStorage"],
   "host_permissions": ["https://x.com/*", "https://twitter.com/*", "https://github.com/*", "https://release-assets.githubusercontent.com/*", "http://127.0.0.1:8777/*"],

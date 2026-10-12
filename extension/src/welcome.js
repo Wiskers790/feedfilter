@@ -15,3 +15,5 @@ async function tick() {
   if (engine.state === "ready") { set("s-dl", "done", "Downloaded and loaded."); $("#bar").style.width = "100%"; set("s-go", "done"); $("#go").hidden = false; return; }
 }
 tick(); setInterval(tick, 700);
+// Loaded from a folder (GitHub install): remind people not to delete that folder.
+chrome.management.getSelf().then((me) => { if (me.installType === "development") $("#keep").hidden = false; }).catch(() => {});

@@ -13,3 +13,4 @@ li.fail small { color:var(--warn); }
 .btn { display:inline-block; background:var(--acc); color:#fff; text-decoration:none; font-weight:700; padding:12px 22px; border-radius:12px; }
 .tips { display:grid; gap:12px; margin-top:32px; } .tips div { border:1px solid var(--line); border-radius:14px; padding:14px 16px; color:var(--muted); font-size:14px; }
 .tips b { display:block; color:var(--ink); font-size:15px; margin-bottom:2px; }
+.keep { border:1px solid var(--warn); border-radius:14px; padding:12px 16px; font-size:14px; color:var(--muted); margin:0 0 8px; } .keep b { color:var(--ink); }

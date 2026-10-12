@@ -4,26 +4,31 @@ A browser extension that hides posts you don't want to see on X, using rules in 
 "hide crypto shilling", "hide engagement bait", "hide posts about celebrity gossip".
 A small AI model runs **on your own GPU**. Nothing you see is sent anywhere.
 
+![Feed Filter hides matching posts on X behind a slim "Hidden" bar](store/shot1.png)
+
 Hidden posts collapse into a thin bar (`Hidden · Crypto & trading · Show`). Clicking **Show**, or
 **Hide like this** on a post the filter missed, tunes that rule to your taste.
 
-## Install
-Needs a Chromium browser (Chrome, Edge, Brave…) with WebGPU on a real graphics card. Most computers from the
-last several years qualify.
+## Install (2 minutes)
 
-**Chrome Web Store:** coming soon (one-click install and automatic updates).
+### [⬇ Download Feed Filter](https://github.com/Wiskers790/feedfilter/releases/latest/download/feedfilter.zip)
 
-**Manual install (works today):**
-1. Download `feedfilter-*.zip` from the [latest release](../../releases/latest) and unzip it.
-2. Open `chrome://extensions`, turn on **Developer mode** (top right), click **Load unpacked**, and choose the
-   unzipped `feedfilter` folder.
-3. The welcome page opens and the model (~450 MB) downloads once. Then open x.com and scroll.
+![Install in 3 steps: download and unzip, turn on Developer mode in chrome://extensions, drag the folder in](store/install.png)
 
-Click the extension icon to switch rules on or off, adjust how strict each one is, write your own rules, or
-see what was hidden recently.
+1. **Download** [`feedfilter.zip`](https://github.com/Wiskers790/feedfilter/releases/latest/download/feedfilter.zip),
+   unzip it, and move the `feedfilter` folder somewhere it can stay (Chrome runs it from there).
+2. Open **`chrome://extensions`** and switch on **Developer mode** (top right).
+3. **Drag the `feedfilter` folder onto that page**, or click **Load unpacked** and choose it.
 
-**Linux laptops with an NVIDIA + Intel GPU:** Chrome picks the Intel GPU (or a software fallback) by default.
-If the popup says your computer isn't supported, start Chrome on the NVIDIA GPU:
+The welcome page opens and the model (~450 MB) downloads once. Then open x.com and scroll.
+Works in Chrome, Edge (`edge://extensions`), Brave and other Chromium browsers with WebGPU on a real graphics card,
+which most computers from the last several years have.
+
+**Updates:** when a new version is out, the extension's popup tells you. Download it again, replace the folder,
+and click ↻ on the extension in `chrome://extensions`. Your rules and the downloaded model are kept.
+
+**Linux laptops with an NVIDIA + Intel GPU:** if the popup says your computer isn't supported, start Chrome on the
+NVIDIA GPU:
 ```bash
 prime-run google-chrome-stable --enable-features=Vulkan
 ```
